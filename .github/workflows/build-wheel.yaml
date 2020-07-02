@@ -17,18 +17,18 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v2
       - name: Log in to the GitHub registry
-        run: docker login --password "${{ secrets.GITHUB_TOKEN }}" --username "${GITHUB_ACTOR}" docker.pkg.github.com
+        run: docker login --password ${{ github.token }} --username ${{ github.actor }} docker.pkg.github.com
       - name: Run build script in Alpine container
         run: docker-compose up build
       - name: List build artifacts
-        run: ls -hl "${GITHUB_WORKSPACE}/pendulum/dist"
+        run: ls -hl ${{ github.workspace }}/pendulum/dist
       - name: Upload wheel as release asset
         if: github.event_name == 'release'
         uses: actions/upload-release-asset@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           asset_content_type: application/octet-stream
-          asset_path: ${GITHUB_WORKSPACE}/pendulum/dist/pendulum-${{ github.event.release.tag_name }}-cp38-cp38-linux_x86_64.whl
+          asset_path: ${{ github.workspace }}/pendulum/dist/pendulum-${{ github.event.release.tag_name }}-cp38-cp38-linux_x86_64.whl
           asset_name: pendulum-${{ github.event.release.tag_name }}-cp38-cp38-linux_x86_64.whl
           upload_url: ${{ github.event.release.upload_url }}

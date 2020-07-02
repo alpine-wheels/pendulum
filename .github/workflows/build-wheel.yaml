@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+    release:
+      types:
+        - publish
 
 jobs:
 
@@ -19,3 +22,13 @@ jobs:
         run: docker-compose up build
       - name: List build artifacts
         run: ls -hl "${GITHUB_WORKSPACE}/pendulum/dist"
+      - name: Upload wheel as release asset
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          asset_content_type: application/octet-stream
+          asset_path: ${GITHUB_WORKSPACE}/pendulum/dist/pendulum-${{ github.event.release.tag_name }}-cp38-cp38-linux_x86_64.whl
+          asset_name: pendulum-${{ github.event.release.tag_name }}-cp38-cp38-linux_x86_64.whl
+          upload_url: ${{ github.event.release.upload_url }}

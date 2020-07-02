@@ -1,0 +1,21 @@
+name: Build Python wheel for Alpine Linux
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  build:
+    name: Build Python wheel for Alpine Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+      - name: Log in to the GitHub registry
+        run: docker login --password "${{ secrets.GITHUB_TOKEN }}" --username "${GITHUB_ACTOR}" docker.pkg.github.com
+      - name: Run build script in Alpine container
+        run: docker-compose up build
+      - name: List build artifacts
+        run: ls -hl "${GITHUB_WORKSPACE}/pendulum/dist"

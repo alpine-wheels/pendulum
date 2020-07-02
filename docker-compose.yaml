@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  build:
+    image: docker.pkg.github.com/alpine-wheels/builder/builder
+    working_dir: /workspace
+    entrypoint:
+      - /bin/sh
+      - build.sh
+    environment:
+      POETRY_ACCEPT: 'false'
+    volumes:
+      - '${GITHUB_WORKSPACE}:/workspace'

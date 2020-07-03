@@ -20,6 +20,8 @@ jobs:
         run: docker-compose up build
       - name: List build artifacts
         run: ls -hl ${{ github.workspace }}/pendulum/dist
+      - name: Show sha256 of build artifacts
+        run: shasum -a 256 ${{ github.workspace }}/psycopg2/dist/*
       - name: Upload wheel as release asset
         if: github.event_name == 'release'
         uses: actions/upload-release-asset@v1

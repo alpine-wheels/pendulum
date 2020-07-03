@@ -7,7 +7,5 @@ services:
     entrypoint:
       - /bin/sh
       - build.sh
-#    environment:
-#      POETRY_ACCEPT: 'false'
     volumes:
       - '${GITHUB_WORKSPACE}:/workspace'

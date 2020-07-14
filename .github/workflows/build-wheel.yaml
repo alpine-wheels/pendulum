@@ -1,3 +1,5 @@
+# version 2020.1
+
 name: Build Python wheel for Alpine Linux
 
 on:
@@ -27,6 +29,7 @@ jobs:
       - name: Show sha256 of asset
         run: shasum -a 256 ${{ github.workspace }}/${{ steps.asset.outputs.filename }}
       - name: Upload asset to release
+        id: upload
         if: github.event_name == 'release'
         uses: actions/upload-release-asset@v1
         env:
@@ -44,4 +47,3 @@ jobs:
           repository: alpine-wheels/index
           event-type: add_file
           client-payload: '{"package_name": "${{ steps.asset.outputs.package_name }}", "href": "${{ steps.upload.outputs.browser_download_url }}", "hash_name": "sha256", "hash_value": "${{ steps.asset.outputs.sha256 }}"}'
-  
